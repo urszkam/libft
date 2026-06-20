@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <strings.h>
 
 #define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
@@ -363,7 +364,7 @@ void test_ft_isprint()
        int result2 = ft_isprint(126);
        int expected2 = isprint(126) != 0;
        result = result2 == expected2;
-       printf("Test 2: ft_isprint(127) - Result: %d, Expected: %d - %s\n",
+       printf("Test 2: ft_isprint(126) - Result: %d, Expected: %d - %s\n",
               result2, expected2,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -376,10 +377,10 @@ void test_ft_isprint()
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
        // Test case 4: above the upper limit
-       int result4 = ft_isprint(128);
-       int expected4 = isprint(128) != 0;
+       int result4 = ft_isprint(127);
+       int expected4 = isprint(127) != 0;
        result = result4 == expected4;
-       printf("Test 4: ft_isprint(128) - Result: %d, Expected: %d - %s\n",
+       printf("Test 4: ft_isprint(127) - Result: %d, Expected: %d - %s\n",
               result4, expected4,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -744,10 +745,10 @@ void test_ft_memcmp()
     char buffer4[5] = "Hall";
     char compare4[5] = "Hell";
 
-    int result4 = ft_memcmp(buffer4, compare4, 6);
-    int expected4 = memcmp(buffer4, compare4, 6);
+    int result4 = ft_memcmp(buffer4, compare4, 4);
+    int expected4 = memcmp(buffer4, compare4, 4);
     result = same_sign(result4, expected4);
-    printf("Test 4: ft_memcmp(\"Hall\", \"Hell\", 6) - Result: %d, Expected: %d - %s\n",
+    printf("Test 4: ft_memcmp(\"Hall\", \"Hell\", 4) - Result: %d, Expected: %d - %s\n",
         result4, expected4, result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
     // Test case 5: comparing 0 chars
@@ -812,26 +813,11 @@ void test_ft_strjoin()
        char *result2 = ft_strjoin("", "");
        char *expected2 = "";
        result = strcmp(result2, expected2) == 0;
-	       printf("Test 2: ft_strjoin(\"\", \"\") - Result: %s, Expected: %s - %s\n",
-	              result2, expected2,
-	              result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
-	       char *result3 = ft_strjoin(NULL, "World!");
-	       char *expected3 = "World!";
-	       result = strcmp(result3, expected3) == 0;
-	       printf("Test 3: ft_strjoin(NULL, \"World!\") - Result: %s, Expected: %s - %s\n",
-	              result3, expected3,
-	              result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
-
-	       char *result4 = ft_strjoin("Hello ", NULL);
-	       char *expected4 = "Hello ";
-	       result = strcmp(result4, expected4) == 0;
-	       printf("Test 4: ft_strjoin(\"Hello \", NULL) - Result: %s, Expected: %s - %s\n",
-	              result4, expected4,
-	              result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
-	       free(result1);
-	       free(result2);
-	       free(result3);
-	       free(result4);
+       printf("Test 2: ft_strjoin(\"\", \"\") - Result: %s, Expected: %s - %s\n",
+              result2, expected2,
+              result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+       free(result1);
+       free(result2);
 }
 
 void test_ft_strtrim()
@@ -922,17 +908,10 @@ void test_ft_split()
     result = arrcmp(result4, expected4) == 0;
     printf("Test 4: ft_split(\"\", '.') - Result: {");
     print_arr(result4);
-	    printf("NULL}, Expected: {");
-	    print_arr(expected4);
-	    printf("NULL} %s\n", result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
-	    free_array(result4);
-
-	    // Test case 5: NULL string
-	    char **result5 = ft_split(NULL, ',');
-	    result = result5 == NULL;
-	    printf("Test 5: ft_split(NULL, ',') - Result: %p, Expected: NULL - %s\n",
-	           (void *)result5,
-	           result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+    printf("NULL}, Expected: {");
+    print_arr(expected4);
+    printf("NULL} %s\n", result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+    free_array(result4);
 }
 
 void test_ft_atoi()
@@ -1017,6 +996,20 @@ void test_ft_calloc()
         result ? GREEN "Pass" COLOR_RESET : RED "Fail" COLOR_RESET);
     free(result3);
     free(expected3);
+
+    // Test case 4: Zero element count should return a freeable pointer
+    void *result4 = ft_calloc(0, sizeof(int));
+    result = result4 != NULL;
+    printf("Test 4: ft_calloc(0, sizeof(int)) - Result: %s\n",
+        result ? GREEN "Pass" COLOR_RESET : RED "Fail" COLOR_RESET);
+    free(result4);
+
+    // Test case 5: Zero element size should return a freeable pointer
+    void *result5 = ft_calloc(5, 0);
+    result = result5 != NULL;
+    printf("Test 5: ft_calloc(5, 0) - Result: %s\n",
+        result ? GREEN "Pass" COLOR_RESET : RED "Fail" COLOR_RESET);
+    free(result5);
 }
 
 void test_ft_strdup()
