@@ -34,6 +34,11 @@ tests:
 	@./tests.out
 	@rm -f tests.out *.txt
 
+bsd_tests:
+	@cc ${CFLAGS} -o bsd_tests.out .bsd_tests.c -L. -lft -I./ -lbsd
+	@./bsd_tests.out
+	@rm -f bsd_tests.out
+
 memory_leaks:
 	@cc ${CFLAGS} -o tests.out .tests.c -L. -lft -I./
 	@touch endl.txt nbr.txt str.txt char.txt
@@ -48,4 +53,4 @@ bonus_tests:
 	valgrind --leak-check=full --show-leak-kinds=all ./bonus_tests.out
 	@rm -f bonus_tests.out *.txt
 
-.PHONY: all clean fclean re bonus bonus_tests tests
+.PHONY: all clean fclean re bonus bonus_tests bsd_tests tests
