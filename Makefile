@@ -26,8 +26,6 @@ fclean: clean
 	@${RM} ${NAME}
 re: fclean all
 
-bonus: ${NAME}
-
 tests:
 	@cc ${CFLAGS} -o tests.out .tests.c -L. -lft -I./
 	@touch endl.txt nbr.txt str.txt char.txt
