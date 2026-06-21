@@ -12,15 +12,6 @@
 #define COLOR_RESET "\x1b[0m"
 
 /* Initialize and Cleanup Functions */
-/*int init_suite()
-{
-       return 0;
-}
-
-int clean_suite()
-{
-       return 0;
-}*/
 
 static char caesarEncrypt(unsigned int i, char c)
 {
@@ -86,7 +77,7 @@ void test_ft_memset()
     ft_memset(buffer2, 'X', sizeof(buffer2) - 1);
     memset(expected2, 'X', sizeof(expected2) - 1);
     int result2 = memcmp(buffer2, expected2, sizeof(buffer2)) == 0;
-    printf("Test 1: ft_memset(\"Test\", 'X', sizeof(buffer2) - 1) - Result: %s, Expected: %s - %s\n",
+    printf("Test 1: ft_memset(\"Test\", 'X', 4) - Result: %s, Expected: %s - %s\n",
         buffer2, expected2, result2 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
     
     // Test case 3: filling part of a buffer with a constant value
@@ -98,6 +89,16 @@ void test_ft_memset()
     int result3 = memcmp(buffer3, expected3, sizeof(buffer3)) == 0;
     printf("Test 2: ft_memset(\"Love You\" + 3, 'X', 3) - Result: %s, Expected: %s - %s\n",
         buffer3, expected3, result3 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+
+    // Test case 3: overwriting the string terminator
+    char buffer4[6] = {'T', 'e', 's', 't', 0, 0};
+    char expected4[6] = {'T', 'e', 's', 't', 0, 0};
+
+    ft_memset(buffer4 + 4, 'X', 1);
+    memset(expected4 + 4, 'X', 1);
+    int result4 = memcmp(buffer4, expected4, sizeof(buffer4)) == 0;
+    printf("Test 3: ft_memset(\"Test\" + 4, 'X', 1) - Result: %s, Expected: %s - %s\n",
+        buffer4, expected4, result4 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 }
 
 void test_ft_bzero()
@@ -119,7 +120,7 @@ void test_ft_bzero()
     ft_bzero(buffer2, sizeof(buffer2) - 1);
     bzero(expected2, sizeof(expected2) - 1);
     int result2 = memcmp(buffer2, expected2, sizeof(buffer2)) == 0;
-    printf("Test 2: ft_bzero(\"Test\", sizeof(buffer) - 1) - Result: %s, Expected: %s - %s\n",
+    printf("Test 2: ft_bzero(\"Test\", 4) - Result: %s, Expected: %s - %s\n",
         buffer2, expected2, result2 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
     
     // Test case 3: zeroing out part of a buffer
@@ -155,7 +156,7 @@ void test_ft_memcpy()
     ft_memcpy(destination2, source2, sizeof(source2));
     memcpy(expected2, source2, sizeof(source2));
     int result2 = memcmp(destination2, expected2, sizeof(destination2)) == 0;
-    printf("Test 2: ft_memcpy(destination2, source2, sizeof(source2)) - Result: %s, Expected: %s - %s\n",
+    printf("Test 2: ft_memcpy(\"\", \"Test\", 5) - Result: %s, Expected: %s - %s\n",
         destination2, expected2, result2 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
     
     // Test case 3: copying from a non-empty source to part of a destination
@@ -166,7 +167,7 @@ void test_ft_memcpy()
     ft_memcpy(destination3 + 3, source3, 4);
     memcpy(expected3 + 3, source3, 4);
     int result3 = memcmp(destination3, expected3, sizeof(destination3)) == 0;
-    printf("Test 3: ft_memcpy(\"Love You\" + 3, \"\", 4) - Result: %s, Expected: %s - %s\n",
+    printf("Test 3: ft_memcpy(\"Love You\" + 3, \"XXXXXXXX\", 4) - Result: %s, Expected: %s - %s\n",
         destination3, expected3, result3 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 }
 
@@ -180,7 +181,7 @@ void test_ft_memmove()
     ft_memmove(result1 + 1, source1, 5);
     memmove(expected1 + 1, source1, 5);
     int result = memcmp(result1, expected1, sizeof(result1)) == 0;
-    printf("Test 1: ft_memmove(destination1 + 1, source1, 5) - Result: %s, Expected: %s - %s\n",
+    printf("Test 1: ft_memmove(\"World\" + 1, \"Hello\", 5) - Result: %s, Expected: %s - %s\n",
     	result1, expected1, 
     	result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -192,19 +193,18 @@ void test_ft_memmove()
     ft_memmove(result2, source2, sizeof(source2));
     memmove(expected2, source2, sizeof(source2));
     result = memcmp(result2, expected2, sizeof(result2)) == 0;
-    printf("Test 2: ft_memmove(\"\", \"Test\", sizeof(\"Test\")) - Result: %s, Expected: %s - %s\n",
+    printf("Test 2: ft_memmove(\"\", \"Test\", 5) - Result: %s, Expected: %s - %s\n",
     result2, expected2,
     result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
     // Test case 3: overlapping move from a non-empty source to part of a destination
-    char source3[9] = "Love You";
-    char result3[8] = "XXXXXXX";
-    char expected3[8] = "XXXXXXX";
+    char result3[9] = "Love You";
+    char expected3[9] = "Love You";
 
-    ft_memmove(result3 + 3, source3, 3);
-    memmove(expected3 + 3, source3, 3);
+    ft_memmove(result3 + 3, result3, 3);
+    memmove(expected3 + 3, expected3, 3);
     result = memcmp(result3, expected3, sizeof(result3)) == 0;
-    printf("Test 3: ft_memmove(\"XXXXXXX\" + 3, \"Love You\", 3) - Result: %s, Expected: %s - %s\n",
+    printf("Test 3: ft_memmove(\"Love You\" + 3, \"Love You\", 3) - Result: %s, Expected: %s - %s\n",
     	result3, expected3,
     	result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -512,7 +512,7 @@ void test_ft_toupper()
        char result3 = ft_toupper(0);
        char expected3 = toupper(0);
        result = result3 == expected3;
-       printf("Test 3: ft_toupper(0) - Result: %c, Expected: %c - %s\n",
+       printf("Test 3: ft_toupper(0) - Result: %d, Expected: %d - %s\n",
               result3, expected3,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -547,7 +547,7 @@ void test_ft_tolower()
        char result3 = ft_tolower(0);
        char expected3 = tolower(0);
        result = result3 == expected3;
-       printf("Test 3: ft_tolower(0) - Result: %c, Expected: %c - %s\n",
+       printf("Test 3: ft_tolower(0) - Result: %d, Expected: %d - %s\n",
               result3, expected3,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -624,9 +624,9 @@ void test_ft_strrchr()
        // Test case 4: char is \0
        char *result4 = ft_strrchr("Hello World!", '\0');
        char *expected4 = strrchr("Hello World!", '\0');
-       result = strcmp(result4, expected4) == 0;
-       printf("Test 4: ft_strrchr(\"Hello World!\", '\\0') - Result: %s, Expected: %s - %s\n",
-              result4, expected4,
+       result = memcmp((void *)result4, (void *)expected4, strlen(expected4) + 1) == 0;
+       printf("Test 4: ft_strrchr(\"Hello World!\", '\\0') - Result: %p, Expected: %p - %s\n",
+              (void *)result4, (void *)expected4,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 }
 
@@ -693,7 +693,7 @@ void test_ft_memchr()
         (char *) result2,(char *) expected2, result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
     
     // Test case 3: finding 'i' in part of a buffer
-    char buffer3[9] = "Love You";
+    char buffer3[21] = "Love You\0\0xSurprise!";
 
     void* result3 = ft_memchr(buffer3, ' ', 5);
     void* expected3 = memchr(buffer3, ' ', 5);
@@ -705,7 +705,7 @@ void test_ft_memchr()
     void* result4 = ft_memchr(buffer3, 'x', sizeof(buffer3));
     void* expected4 = memchr(buffer3, 'x', sizeof(buffer3));
     result = result4 == expected4;
-    printf("Test 4: ft_memchr(\"Love You\", 'x', sizeof(\"Love You\")) - Result: %s, Expected: %s - %s\n", 
+    printf("Test 4: ft_memchr(\"Love You\\0\\0xSurprise!\", 'x', sizeof(\"Love You\\0\\0xSurprise!\")) - Result: %s, Expected: %s - %s\n", 
         (char *) result4, (char *) expected4, result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 }
 
@@ -816,8 +816,17 @@ void test_ft_strjoin()
        printf("Test 2: ft_strjoin(\"\", \"\") - Result: %s, Expected: %s - %s\n",
               result2, expected2,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+
+       // Test case 3: string with NULL
+       char *result3 = ft_strjoin("Hello", NULL);
+       char *expected3 = "Hello";
+       result = result3 && strcmp(result3, expected3) == 0;
+       printf("Test 3: ft_strjoin(\"Hello\", NULL) - Result: %s, Expected: %s - %s\n",
+              result3 ? result3 : "NULL", expected3,
+              result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
        free(result1);
        free(result2);
+       free(result3);
 }
 
 void test_ft_strtrim()
@@ -872,6 +881,11 @@ void test_ft_split()
     printf("NULL}, Expected: {");
     print_arr(expected1);
     printf("NULL} %s\n", result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+    int count1 = 0;
+    while (result1[count1])
+        count1++;
+    printf("Test 5: ft_split(\",Hello,World,,This,is,a,,,,,,test,\", ',') element count - Result: %d, Expected: 6 - %s\n",
+        count1, count1 == 6 ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
     free_array(result1);
     
     // Test case 2: Multiple words, single separator
@@ -917,17 +931,17 @@ void test_ft_split()
 void test_ft_atoi()
 {
        // Test case 1: Positive integer
-       int result1 = ft_atoi("\t\v +123");
-       int expected1 = atoi("\t\v +123");
-       printf("Test 1: ft_atoi(\"\\t\\v +123\") - Result: %d, Expected: %d - %s\n",
+       int result1 = ft_atoi("\t\v -123");
+       int expected1 = atoi("\t\v -123");
+       printf("Test 1: ft_atoi(\"\\t\\v -123\") - Result: %d, Expected: %d - %s\n",
               result1, expected1,
               (result1 == expected1) ? GREEN "PASS" COLOR_RESET
                                      : RED "FAIL" COLOR_RESET);
 
        // Test case 2: Negative integer
-       int result2 = ft_atoi("-456abc");
-       int expected2 = atoi("-456abc");
-       printf("Test 2: ft_atoi(\"-456abc\") - Result: %d, Expected: %d - %s\n",
+       int result2 = ft_atoi("-+-456abc");
+       int expected2 = atoi("-+-456abc");
+       printf("Test 2: ft_atoi(\"-+-456abc\") - Result: %d, Expected: %d - %s\n",
               result2, expected2,
               (result2 == expected2) ? GREEN "PASS" COLOR_RESET
                                      : RED "FAIL" COLOR_RESET);
@@ -1178,7 +1192,7 @@ void test_ft_striteri()
        char *expected1 = "XaXaXabbbbXa!";
        ft_striteri(result1, &a_to_X);
        int result = strcmp(result1, expected1) == 0;
-       printf("Test 1: ft_striteri(\"aaaaaabbbbaa\", &a_to_X) - Result: %s, Expected: %s - %s\n",
+       printf("Test 1: ft_striteri(\"aaaaaabbbbaa!\", &a_to_X) - Result: %s, Expected: %s - %s\n",
               result1, expected1,
               result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
@@ -1313,74 +1327,74 @@ void test_ft_putnbr_fd()
 
 int main()
 {
-       printf( BLUE "test_ft_isalpha\n" COLOR_RESET);
-       test_ft_isalpha();
-       printf( BLUE "test_ft_isdigit\n" COLOR_RESET);
-       test_ft_isdigit();
-       printf( BLUE "test_ft_isalnum\n" COLOR_RESET);
-       test_ft_isalnum();
-       printf( BLUE "test_ft_isascii\n" COLOR_RESET);
-       test_ft_isascii();
-       printf( BLUE "test_ft_isprint\n" COLOR_RESET);
-       test_ft_isprint();
-       printf( BLUE "test_ft_strlen\n" COLOR_RESET);
-       test_ft_strlen();
-       printf( BLUE "test_ft_memset\n" COLOR_RESET);
-       test_ft_memset();
+       printf( BLUE "test_ft_atoi\n" COLOR_RESET);
+       test_ft_atoi();
        printf( BLUE "test_ft_bzero\n" COLOR_RESET);
        test_ft_bzero();
-       printf( BLUE "test_ft_memcpy\n" COLOR_RESET);
-       test_ft_memcpy();
-       printf( BLUE "test_ft_memmove\n" COLOR_RESET);
-       test_ft_memmove();
-       printf( BLUE "test_ft_strlcpy\n" COLOR_RESET);
-       test_ft_strlcpy();
-       printf( BLUE "test_ft_strlcat\n" COLOR_RESET);
-       test_ft_strlcat();
-       printf( BLUE "test_ft_toupper\n" COLOR_RESET);
-       test_ft_toupper();
-       printf( BLUE "test_ft_tolower\n" COLOR_RESET);
-       test_ft_tolower();
-       printf( BLUE "test_ft_strchr\n" COLOR_RESET);
-       test_ft_strchr();
-       printf( BLUE "test_ft_strrchr\n" COLOR_RESET);
-       test_ft_strrchr();
-       printf( BLUE "test_ft_strncmp\n" COLOR_RESET);
-       test_ft_strncmp();
+       printf( BLUE "test_ft_calloc\n" COLOR_RESET);
+       test_ft_calloc();
+       printf( BLUE "test_ft_isalnum\n" COLOR_RESET);
+       test_ft_isalnum();
+       printf( BLUE "test_ft_isalpha\n" COLOR_RESET);
+       test_ft_isalpha();
+       printf( BLUE "test_ft_isascii\n" COLOR_RESET);
+       test_ft_isascii();
+       printf( BLUE "test_ft_isdigit\n" COLOR_RESET);
+       test_ft_isdigit();
+       printf( BLUE "test_ft_isprint\n" COLOR_RESET);
+       test_ft_isprint();
+       printf( BLUE "test_ft_itoa\n" COLOR_RESET);
+       test_ft_itoa();
        printf( BLUE "test_ft_memchr\n" COLOR_RESET);
        test_ft_memchr();
        printf( BLUE "test_ft_memcmp\n" COLOR_RESET);
        test_ft_memcmp();
-       printf( BLUE "test_ft_strnstr\n" COLOR_RESET);
-       test_ft_strnstr();
-       printf( BLUE "test_ft_atoi\n" COLOR_RESET);
-       test_ft_atoi();
-       printf( BLUE "test_ft_calloc\n" COLOR_RESET);
-       test_ft_calloc();
-       printf( BLUE "test_ft_strdup\n" COLOR_RESET);
-       test_ft_strdup();       
-       printf( BLUE "test_ft_substr\n" COLOR_RESET);
-       test_ft_substr();
-       printf( BLUE "test_ft_strjoin\n" COLOR_RESET);
-       test_ft_strjoin();
-       printf( BLUE "test_ft_strtrim\n" COLOR_RESET);
-       test_ft_strtrim();
-       printf( BLUE "test_ft_split\n" COLOR_RESET);
-       test_ft_split();
-       printf( BLUE "test_ft_itoa\n" COLOR_RESET);
-       test_ft_itoa();
-       printf( BLUE "test_ft_strmapi\n" COLOR_RESET);
-       test_ft_strmapi();
-       printf( BLUE "test_ft_striteri\n" COLOR_RESET);
-       test_ft_striteri();
+       printf( BLUE "test_ft_memcpy\n" COLOR_RESET);
+       test_ft_memcpy();
+       printf( BLUE "test_ft_memmove\n" COLOR_RESET);
+       test_ft_memmove();
+       printf( BLUE "test_ft_memset\n" COLOR_RESET);
+       test_ft_memset();
        printf( BLUE "test_ft_putchar_fd\n" COLOR_RESET);
        test_ft_putchar_fd();
-       printf( BLUE "test_ft_putstr_fd\n" COLOR_RESET);
-       test_ft_putstr_fd();
        printf( BLUE "test_ft_putendl_fd\n" COLOR_RESET);
        test_ft_putendl_fd();
        printf( BLUE "test_ft_putnbr_fd\n" COLOR_RESET);
        test_ft_putnbr_fd();
+       printf( BLUE "test_ft_putstr_fd\n" COLOR_RESET);
+       test_ft_putstr_fd();
+       printf( BLUE "test_ft_split\n" COLOR_RESET);
+       test_ft_split();
+       printf( BLUE "test_ft_strchr\n" COLOR_RESET);
+       test_ft_strchr();
+       printf( BLUE "test_ft_strdup\n" COLOR_RESET);
+       test_ft_strdup();       
+       printf( BLUE "test_ft_striteri\n" COLOR_RESET);
+       test_ft_striteri();
+       printf( BLUE "test_ft_strjoin\n" COLOR_RESET);
+       test_ft_strjoin();
+       printf( BLUE "test_ft_strlcpy\n" COLOR_RESET);
+       test_ft_strlcpy();
+       printf( BLUE "test_ft_strlcat\n" COLOR_RESET);
+       test_ft_strlcat();
+       printf( BLUE "test_ft_strlen\n" COLOR_RESET);
+       test_ft_strlen();
+       printf( BLUE "test_ft_strmapi\n" COLOR_RESET);
+       test_ft_strmapi();
+       printf( BLUE "test_ft_strncmp\n" COLOR_RESET);
+       test_ft_strncmp();
+       printf( BLUE "test_ft_strnstr\n" COLOR_RESET);
+       test_ft_strnstr();
+       printf( BLUE "test_ft_strrchr\n" COLOR_RESET);
+       test_ft_strrchr();
+       printf( BLUE "test_ft_strtrim\n" COLOR_RESET);
+       test_ft_strtrim();
+       printf( BLUE "test_ft_substr\n" COLOR_RESET);
+       test_ft_substr();
+       printf( BLUE "test_ft_toupper\n" COLOR_RESET);
+       test_ft_toupper();
+       printf( BLUE "test_ft_tolower\n" COLOR_RESET);
+       test_ft_tolower();
 
        return (0);
 }
