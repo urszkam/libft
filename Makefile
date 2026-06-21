@@ -34,7 +34,7 @@ tests:
 
 bsd_tests:
 	@cc ${CFLAGS} -o bsd_tests.out .bsd_tests.c -L. -lft -I./ -lbsd
-	@./bsd_tests.out
+	valgrind --leak-check=full --show-leak-kinds=all ./bsd_tests.out
 	@rm -f bsd_tests.out
 
 memory_leaks:
