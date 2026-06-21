@@ -24,15 +24,11 @@ static void	ft_free(char **arr, size_t idx)
 	free(arr);
 }
 
-static char	**create_arr(char const *s, char c, size_t arr_len)
+static char	**create_arr(char const *s, char c, size_t arr_len, char **arr)
 {
 	size_t	i;
 	size_t	word_len;
-	char	**arr;
 
-	arr = (char **)malloc(sizeof(char *) * (arr_len + 1));
-	if (!arr)
-		return (NULL);
 	i = 0;
 	while (i < arr_len)
 	{
@@ -57,9 +53,13 @@ static char	**create_arr(char const *s, char c, size_t arr_len)
 char	**ft_split(char const *s, char c)
 {
 	size_t	arr_len;
+	char	**arr;
 
 	if (!s)
 		return (NULL);
 	arr_len = count_words(s, c);
-	return (create_arr(s, c, arr_len));
+	arr = (char **)malloc(sizeof(char *) * (arr_len + 1));
+	if (!arr)
+		return (NULL);
+	return (create_arr(s, c, arr_len, arr));
 }
