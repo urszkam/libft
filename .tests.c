@@ -208,6 +208,24 @@ void test_ft_memmove()
     	result3, expected3,
     	result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 
+    // Test case 4: overlapping move where destination is before source
+    char result4[9] = "Love You";
+    char expected4[9] = "Love You";
+
+    ft_memmove(result4, result4 + 3, 5);
+    memmove(expected4, expected4 + 3, 5);
+    result = memcmp(result4, expected4, sizeof(result4)) == 0;
+    printf("Test 4: ft_memmove(\"Love You\", \"Love You\" + 3, 5) - Result: %s, Expected: %s - %s\n",
+        result4, expected4,
+        result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
+
+    // Test case 5: NULL pointers with zero bytes
+    void *result5 = ft_memmove(NULL, NULL, 0);
+    void *expected5 = NULL;
+    result = result5 == expected5;
+    printf("Test 5: ft_memmove(NULL, NULL, 0) - Result: %p, Expected: %p - %s\n",
+        result5, expected5,
+        result ? GREEN "PASS" COLOR_RESET : RED "FAIL" COLOR_RESET);
 }
 
 void test_ft_isalnum()
