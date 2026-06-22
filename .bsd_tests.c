@@ -64,10 +64,10 @@ static void	test_ft_strlcpy_bsd(void)
 static void	test_ft_strlcat_bsd(void)
 {
 	check_strlcat("ft_strlcat(Hello,  World, 15)", "Hello", " World", 15);
-	check_strlcat("ft_strlcat(Hello,  World, 8)", "Hello", " World", 8);
-	check_strlcat("ft_strlcat(Hello, , 10)", "Hello", "", 10);
-	check_strlcat("ft_strlcat(, Hello World, 15)", "", "Hello World", 15);
-	check_strlcat("ft_strlcat(Hello,  World, 3)", "Hello", " World", 3);
+	check_strlcat("ft_strlcat(Hello,  World, 10)", "Hello", " World", 10);
+	check_strlcat("ft_strlcat(Hello, \"\", 10)", "Hello", "", 10);
+	check_strlcat("ft_strlcat(\"\", Hello World, 15)", "", "Hello World", 15);
+	check_strlcat("ft_strlcat(Hello,  World, 5)", "Hello", " World", 5);
 	check_strlcat("ft_strlcat(Hello,  World, 0)", "Hello", " World", 0);
 	check_strlcat("ft_strlcat(Hello, !, 7)", "Hello", "!", 7);
 }
