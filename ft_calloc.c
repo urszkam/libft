@@ -13,7 +13,7 @@ void	*ft_calloc(size_t nelem, size_t elsize)
 	void	*dst;
 
 	if (!nelem || !elsize)
-		return (malloc(0));
+		return (malloc(1));
 	if (nelem > ((size_t)-1) / elsize)
 		return (NULL);
 	dst = (void *)malloc(elsize * nelem);
